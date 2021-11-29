@@ -1,0 +1,9 @@
+TrainingData.csv
+ValidationData.csv
+TestingData.csv
+
+random_free.txt
+
+wandb/
+
+OneClassSVM/data/
