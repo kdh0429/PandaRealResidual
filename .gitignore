@@ -7,4 +7,5 @@ random_free.txt
 
 wandb/
 
-OneClassSVM/data/
+OneClassSVM/data/ResidualData.csv
+OneClassSVM/data/TrainingData.csv
