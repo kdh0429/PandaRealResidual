@@ -11,9 +11,7 @@ from sklearn.svm import OneClassSVM
 import _pickle as cPickle
 
 # Data
-num_train_data = 70000
-num_joint = 7
-num_seq = 5
+num_seq = 10
 
 class PandaOCSVM:
 
