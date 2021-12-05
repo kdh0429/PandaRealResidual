@@ -35,18 +35,18 @@ learning_rate_start = 1e-4
 learning_rate_end = 1e-5
 betas = [0.9, 0.999]
 
-output_max = genfromtxt('MinMax.csv', delimiter=",")[0]
+output_max = genfromtxt('./data/MinMax.csv', delimiter=",")[0]
 output_max_weight = num_joint * output_max / np.sum(output_max)
 print("Scaling: ",output_max_weight)
 
 
-train_data = FCModuleDataset('./TrainingData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, output_idx=output_joint_idx)
+train_data = FCModuleDataset('./data/TrainingData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, output_idx=output_joint_idx)
 trainloader = DataLoader(train_data, batch_size=batch_size, shuffle=True, drop_last=True, num_workers=8, pin_memory=False)
 
-validation_data = FCModuleDataset('./ValidationData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, output_idx=output_joint_idx)
+validation_data = FCModuleDataset('./data/ValidationData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, output_idx=output_joint_idx)
 validationloader = DataLoader(validation_data, batch_size=batch_size, shuffle=False, drop_last=True, num_workers=8, pin_memory=False)
 
-test_data = FCModuleDataset('./TestingData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, output_idx=output_joint_idx)
+test_data = FCModuleDataset('./data/TestingData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, output_idx=output_joint_idx)
 testloader = DataLoader(test_data, batch_size=batch_size, shuffle=False, drop_last=True, num_workers=8, pin_memory=False)
 
 class PandaFCNet(nn.Module):

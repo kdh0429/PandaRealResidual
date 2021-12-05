@@ -1,6 +1,6 @@
 clear all
 
-MinMax = load('../MinMax.csv');
+MinMax = load('../data/MinMax.csv');
 
 ext_jts = load('TestingExtTorque.txt');
 data_size = size(load('backward_real_0.csv'),1);

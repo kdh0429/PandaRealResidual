@@ -27,27 +27,27 @@ sequence_length = 10
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 # Training
-num_epochs = 2500
+num_epochs = 5000
 batch_size = 1000
 learning_rate_start = 1e-3
 learning_rate_end = 1e-4
 betas = [0.9, 0.999]
 
-output_max = genfromtxt('MinMax.csv', delimiter=",")[0]
+output_max = genfromtxt('./data/MinMax.csv', delimiter=",")[0]
 output_max_weight = num_joint * output_max / np.sum(output_max)
 print("Scaling: ",output_max_weight)
 
 
-train_data = FCDataset('./TrainingData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, n_output=num_joint)
+train_data = FCDataset('./data/TrainingData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, n_output=num_joint)
 trainloader = DataLoader(train_data, batch_size=batch_size, shuffle=True, drop_last=True, num_workers=8, pin_memory=False)
 
-train_data_not_mixed = FCDataset('./TrainingDataNotMixed.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, n_output=num_joint)
+train_data_not_mixed = FCDataset('./data/TrainingDataOCSVM.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, n_output=num_joint)
 train_not_mixed_loader = DataLoader(train_data_not_mixed, batch_size=batch_size, shuffle=True, drop_last=True, num_workers=8, pin_memory=False)
 
-validation_data = FCDataset('./ValidationData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, n_output=num_joint)
+validation_data = FCDataset('./data/ValidationData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, n_output=num_joint)
 validationloader = DataLoader(validation_data, batch_size=batch_size, shuffle=False, drop_last=True, num_workers=8, pin_memory=False)
 
-test_data = FCDataset('./TestingData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, n_output=num_joint)
+test_data = FCDataset('./data/TestingData.csv',seq_len=sequence_length, n_input_feat=num_input_feature*num_joint, n_output=num_joint)
 testloader = DataLoader(test_data, batch_size=batch_size, shuffle=False, drop_last=True, num_workers=8, pin_memory=False)
 
 class PandaFCNet(nn.Module):
@@ -230,6 +230,6 @@ for conditions, states, inputs in train_not_mixed_loader:
 
     backward_dyn_predictions = PandaFC.forward(conditions, states, inputs)
 
-    residual_arr = np.append(residual_arr, inputs.cpu().numpy() - backward_dyn_predictions.cpu().detach().numpy(), axis=0)
+    residual_arr = np.append(residual_arr, output_max*(inputs.cpu().numpy() - backward_dyn_predictions.cpu().detach().numpy()), axis=0)
 
 np.savetxt('./OneClassSVM/data/ResidualData.csv',residual_arr)

@@ -1,16 +1,15 @@
 data = load('./data/ResidualData.csv');
 
-MaxOutput = prctile(abs(data(:,1:7)),99.9,1);
-MinOutput = -MaxOutput;
-csvwrite('./data/ResiMinMax.csv', [MaxOutput; MinOutput]);
-
-
-TrainingProcessed = ProcessRawData(data, MaxOutput, MinOutput);
+TrainingProcessed = ProcessRawData(data(1000:end,:));
 TrainingDataMix = TrainingProcessed(randperm(size(TrainingProcessed,1)),:);
 csvwrite('./data/TrainingData.csv', TrainingDataMix);
 clear TrainingDataMix
 
-function ProcessedData = ProcessRawData(RawData, MaxOutput, MinOutput)
+TestingResi = load('../result/TestingResi.csv');
+TestingProcessed = ProcessRawData(TestingResi);
+csvwrite('./data/TestingData.csv', TestingProcessed);
+
+function ProcessedData = ProcessRawData(RawData)
     data_dt = 0.01;
 
     num_joint = 7;
@@ -33,7 +32,7 @@ function ProcessedData = ProcessRawData(RawData, MaxOutput, MinOutput)
 
        for past_time_step = 1:num_sequence
            for joint = 1:num_joint
-               Processed(DataIdx, (num_sequence-past_time_step)*num_joint*num_feature + (joint-1)*num_feature + 1) = 2*(RawData(k-past_time_step+1,joint) - MinOutput(joint))/(MaxOutput(joint) - MinOutput(joint))-1;
+               Processed(DataIdx, (num_sequence-past_time_step)*num_joint*num_feature + (joint-1)*num_feature + 1) = RawData(k-past_time_step+1,joint);
            end
        end
 

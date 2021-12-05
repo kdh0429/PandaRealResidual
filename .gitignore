@@ -1,7 +1,4 @@
-TrainingData.csv
-TrainingDataNotMixed.csv
-ValidationData.csv
-TestingData.csv
+data/
 
 random_free.txt
 

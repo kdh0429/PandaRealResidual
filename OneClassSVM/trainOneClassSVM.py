@@ -6,13 +6,13 @@ from sklearn.svm import OneClassSVM
 import _pickle as cPickle
 
 # Data
-num_train_data = 266000
 num_joint = 7
+num_seq = 10
 
-train_data = genfromtxt('./data/TrainingData.csv', delimiter=',')
-train_idx = np.random.randint(train_data.shape[0], size=num_train_data)
+#train_data = genfromtxt('./data/TrainingData.csv', delimiter=',')
+train_data = genfromtxt('./data/TestingData.csv', delimiter=',')
 
-clf = OneClassSVM(gamma='scale', nu=0.000001).fit(train_data[train_idx])
+clf = OneClassSVM(gamma=0.001, nu=0.001).fit(abs(train_data))
 
 # save the classifier
 with open('./model/ocsvm_residual.pkl', 'wb') as fid:
